@@ -16,6 +16,12 @@ principal CN[
 	knows public alice_pk
 ]
 
+principal Bob[
+	knows private bob_sk
+	knows public bob_pk
+	knows public commnet_pk
+]
+
 principal Alice[
 	ensaje = HASH(m)
 	firma_alice = SIGN(alice_sk, ensaje)
@@ -27,7 +33,12 @@ Alice -> CN: prim, ensaje
 principal CN[
 	firma_recm, mensajito = SPLIT(prim)
 	verif_firma = SIGNVERIF(alice_pk, ensaje, firma_recm)
+	generates mr
+	firma_comnet = SIGN(commnet_sk, HASH(mr))
+	mesaje = CONCAT(firma_comnet, mr)
 ]
+
+
 
 queries[
 	authentication? Alice -> CN: prim
