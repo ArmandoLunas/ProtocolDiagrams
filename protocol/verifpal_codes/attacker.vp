@@ -1,0 +1,36 @@
+attacker[active]
+
+principal Alice[
+	knows private alice_sk
+	knows public alice_pk
+	generates m
+	
+	//mensaje = HASH(m)
+	//firma_alice = SIGN(alice_sk, mensaje)∏
+	//prim = CONCAT(firma_alice, m)
+]
+
+principal CN[
+	knows private commnet_sk
+	knows public commnet_pk
+	knows public alice_pk
+]
+
+principal Alice[
+	ensaje = HASH(m)
+	firma_alice = SIGN(alice_sk, ensaje)
+	prim = CONCAT(firma_alice, m)
+]
+
+Alice -> CN: prim, ensaje
+
+principal CN[
+	firma_recm, mensajito = SPLIT(prim)
+	verif_firma = SIGNVERIF(alice_pk, ensaje, firma_recm)
+]
+
+queries[
+	authentication? Alice -> CN: prim
+	freshness? ensaje 
+	freshness? prim
+]
