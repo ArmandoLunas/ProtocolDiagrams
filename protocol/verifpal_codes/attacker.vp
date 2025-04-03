@@ -4,10 +4,6 @@ principal Alice[
 	knows private alice_sk
 	knows public alice_pk
 	generates m
-	
-	//mensaje = HASH(m)
-	//firma_alice = SIGN(alice_sk, mensaje)∏
-	//prim = CONCAT(firma_alice, m)
 ]
 
 principal CN[
@@ -28,20 +24,17 @@ principal Alice[
 	prim = CONCAT(firma_alice, m)
 ]
 
-Alice -> CN: prim, ensaje
+Alice -> CN: prim
 
 principal CN[
 	firma_recm, mensajito = SPLIT(prim)
-	verif_firma = SIGNVERIF(alice_pk, ensaje, firma_recm)
+	verif_firma = SIGNVERIF(alice_pk, HASH(mensajito), firma_recm)
 	generates mr
 	firma_comnet = SIGN(commnet_sk, HASH(mr))
 	mesaje = CONCAT(firma_comnet, mr)
 ]
 
-
-
 queries[
-	authentication? Alice -> CN: prim
-	freshness? ensaje 
+	authentication? Alice -> CN: prim 
 	freshness? prim
 ]
